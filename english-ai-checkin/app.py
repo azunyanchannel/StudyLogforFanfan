@@ -1,13 +1,21 @@
 import os
-import requests
+import json
 from flask import Flask, render_template, request, jsonify
+from dotenv import load_dotenv
+from google import genai
+
+load_dotenv()
 
 app = Flask(__name__)
 
 # 从环境变量获取 Gemini API Key
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
-# Gemini API URL, 使用 gemini-pro 模型生成内容
-GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent"
+
+# 初始化 Gemini Client
+if GEMINI_API_KEY:
+    client = genai.Client(api_key=GEMINI_API_KEY)
+else:
+    client = None
 
 @app.route("/")
 def index():
@@ -39,34 +47,20 @@ def analyze():
     "{user_text}"
     """
 
-    payload = {
-        "contents": [{
-            "parts": [{"text": prompt}]
-        }]
-    }
-
-    headers = {
-        "Content-Type": "application/json"
-    }
-
     try:
-        # 发送请求至 Gemini API
-        response = requests.post(
-            f"{GEMINI_API_URL}?key={GEMINI_API_KEY}", 
-            json=payload, 
-            headers=headers
+        # 发送请求至 Gemini API 使用官方 SDK
+        response = client.models.generate_content(
+            model="gemini-3-flash-preview",
+            contents=prompt,
         )
-        response.raise_for_status()
-        
-        result = response.json()
         
         # 提取 Gemini 返回的文本内容
+        generated_text = response.text
+        
         try:
-            generated_text = result["candidates"][0]["content"]["parts"][0]["text"]
             # 处理可能的 markdown 代码块标记 (移除 ```json 和 ```)
             cleaned_text = generated_text.replace("```json", "").replace("```", "").strip()
             
-            import json
             parsed_result = json.loads(cleaned_text)
             
             # 返回提取的 JSON
@@ -81,8 +75,8 @@ def analyze():
                 "raw_response": generated_text
             }), 500
 
-    except requests.exceptions.RequestException as e:
-        return jsonify({"error": f"请求 AI 接口时发生网络错误: {str(e)}"}), 500
+    except Exception as e:
+        return jsonify({"error": f"请求 AI 接口时发生错误: {str(e)}"}), 500
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

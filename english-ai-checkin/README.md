@@ -70,22 +70,17 @@ pip install -r requirements.txt
 
 ### 第五步：设置环境变量
 
-将你在第一步中获得的 API Key 设置为环境变量，供程序读取。
+将你在第一步中获得的 API Key 设置为环境变量，供程序读取。本项目使用 `python-dotenv` 管理环境变量，避免你每次在终端手动输入。
 
-*在 macOS/Linux 下：*
-```bash
-export GEMINI_API_KEY="在这里粘贴你刚刚复制的_API_KEY"
+1. 在项目根目录（即 `english-ai-checkin` 文件夹下）新建一个名为 `.env` 的文件。
+2. （可选）你也可以直接复制项目提供的 `.env.example` 文件，并将其重命名为 `.env`。
+3. 用文本编辑器打开 `.env` 文件，填入你的 API Key，格式如下：
+
+```env
+GEMINI_API_KEY="在这里粘贴你刚刚复制的_API_KEY"
 ```
 
-*在 Windows (CMD) 下：*
-```cmd
-set GEMINI_API_KEY="在这里粘贴你刚刚复制的_API_KEY"
-```
-
-*在 Windows (PowerShell) 下：*
-```powershell
-$env:GEMINI_API_KEY="在这里粘贴你刚刚复制的_API_KEY"
-```
+*安全提示：`.env` 文件包含你的私密密钥，绝不能分享给他人或上传到公开的代码仓库（例如 GitHub）。本项目已经配置好了 `.gitignore`，会自动阻止你上传此文件。*
 
 ### 第六步：启动网站
 
