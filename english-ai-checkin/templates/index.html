@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English AI Check-in</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            margin: 1.5rem;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
+        }
+
+        textarea {
+            width: 100%;
+            height: 180px;
+            padding: 1rem;
+            border: 1.5px solid var(--border-color);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+            box-sizing: border-box;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s ease;
+            background-color: #f9fafb;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background-color: #ffffff;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+        }
+
+        button {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.2);
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        button:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .result-box {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            display: none;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .result-box.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-box h3 {
+            margin-top: 0;
+            font-size: 1.2rem;
+            color: var(--text-main);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.8rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: #e0e7ff;
+            color: #4338ca;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+        }
+
+        .feedback-text {
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            color: #374151;
+        }
+
+        .feedback-text strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .encouragement {
+            font-style: italic;
+            color: #065f46;
+            background-color: #d1fae5;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            border-left: 4px solid #10b981;
+        }
+
+        .error-message {
+            color: #b91c1c;
+            background-color: #fef2f2;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+            border-left: 4px solid #ef4444;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>English AI Check-in</h1>
+        <p class="subtitle">记录你今天的英语学习，获取 AI 分析与建议。</p>
+
+        <textarea id="userInput" placeholder="在这里输入你的英语文本 (例如一篇日记，或今天新学的句子)..."></textarea>
+        <button id="analyzeBtn">Analyze (分析)</button>
+
+        <div id="errorBox" class="error-message"></div>
+
+        <div id="resultBox" class="result-box">
+            <h3>AI 分析结果</h3>
+            <div id="levelBadge" class="badge">英文水平判定</div>
+            <div class="feedback-text">
+                <strong>语法反馈与建议：</strong>
+                <p id="feedbackText"></p>
+            </div>
+            <div class="encouragement" id="encouragementText"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('analyzeBtn').addEventListener('click', async () => {
+            const textInput = document.getElementById('userInput').value.trim();
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            const errorBox = document.getElementById('errorBox');
+            const resultBox = document.getElementById('resultBox');
+
+            const feedbackText = document.getElementById('feedbackText');
+            const encouragementText = document.getElementById('encouragementText');
+            const levelBadge = document.getElementById('levelBadge');
+
+            if (!textInput) {
+                alert('请先输入一些英语内容！');
+                return;
+            }
+
+            // Reset UI
+            errorBox.style.display = 'none';
+            resultBox.classList.remove('active');
+            analyzeBtn.disabled = true;
+            analyzeBtn.textContent = '分析中 (Analyzing)...';
+
+            try {
+                const response = await fetch('/analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ text: textInput })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    // 读取后端返回的由于异常产生的 error 字段
+                    throw new Error(data.error || '请求失败，请稍后再试。');
+                }
+
+                // 更新 UI 字段
+                feedbackText.textContent = data.feedback;
+                encouragementText.textContent = data.encouragement;
+                levelBadge.textContent = '预估水平: ' + data.level;
+
+                resultBox.classList.add('active');
+
+            } catch (error) {
+                errorBox.textContent = error.message;
+                errorBox.style.display = 'block';
+            } finally {
+                analyzeBtn.disabled = false;
+                analyzeBtn.textContent = 'Analyze (分析)';
+            }
+        });
+    </script>
+
+</body>
+
+</html>
