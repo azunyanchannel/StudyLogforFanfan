@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumina - English Writing Assistant</title>
+    <!-- Use Google Fonts (Inter and Playfair Display for quotes) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="glass-header">
+            <div class="logo">✨ Lumina</div>
+            <p class="subtitle">Elevate Your English Writing</p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Left Column: Input and Results -->
+            <div class="left-panel stack-gap">
+                <!-- Editor Section -->
+                <section class="glass-card editor-section">
+                    <div class="card-header">
+                        <h2>New Essay</h2>
+                        <span id="word-count" class="badge">0 words</span>
+                    </div>
+                    <textarea id="essay-input" placeholder="Start typing your English essay here. We will check your grammar and count your words..."></textarea>
+                    
+                    <div class="button-group">
+                        <button id="submit-btn" class="primary-btn">Analyze Essay</button>
+                        <button id="clear-btn" class="outline-btn">Clear</button>
+                    </div>
+                </section>
+
+                <!-- Results Section (Hidden initially) -->
+                <section id="results-section" class="glass-card result-section hidden">
+                    <h2>Analysis Result</h2>
+                    <div id="loading-spinner" class="spinner hidden">Analyzing your essay...</div>
+                    <div id="analysis-content" class="hidden">
+                        <div class="result-block">
+                            <h3>Grammar & Suggestions</h3>
+                            <ul id="grammar-feedback" class="feedback-list">
+                                <!-- Mock grammar feedback will go here -->
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Daily Quote Section -->
+                <div class="quote-card glass-card">
+                    <p id="daily-quote" class="quote-text">"The secret of getting ahead is getting started."</p>
+                    <p id="quote-author" class="quote-author">- Mark Twain</p>
+                </div>
+            </div>
+
+            <!-- Right Column: History -->
+            <div class="right-panel">
+                <section class="glass-card history-section">
+                    <div class="card-header">
+                        <h2>Writing History</h2>
+                        <button id="clear-history-btn" class="text-btn">Clear All</button>
+                    </div>
+                    <div id="history-list" class="history-list">
+                        <!-- History items will be injected here -->
+                        <div class="history-empty">No notes found. Start writing!</div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
