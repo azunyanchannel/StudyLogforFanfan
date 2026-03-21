@@ -1,0 +1,23 @@
+[
+    {
+        "id": "1",
+        "title": "📍 淺草寺",
+        "description": "東京最古老的寺廟，雷門超好拍",
+        "category": "文化",
+        "rating": 5
+    },
+    {
+        "id": "2",
+        "title": "🍜 一蘭拉麵",
+        "description": "一個人也能安心吃的豚骨拉麵",
+        "category": "美食",
+        "rating": 4
+    },
+    {
+        "id": "3",
+        "title": "🎮 秋葉原",
+        "description": "動漫、電玩、女每咖啡廳的聖地",
+        "category": "購物",
+        "rating": 5
+    }
+]
